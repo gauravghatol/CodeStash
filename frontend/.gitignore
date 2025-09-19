@@ -1,0 +1,12 @@
+# Frontend ignores
+node_modules/
+build/
+
+# Env (keep example only in repo)
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-error.log*
