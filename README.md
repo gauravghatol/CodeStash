@@ -34,7 +34,7 @@ Copy and edit the example files:
 ```powershell
 cd D:\CodeStash\backend
 npm install
-npm run dev
+npm start
 ```
 
 2) Frontend (in a second terminal)
