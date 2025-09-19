@@ -22,6 +22,11 @@ app.use('/api/snippets', snippetRoutes);
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
+// Simple root message for platform checks (Render/Heroku root URL)
+app.get('/', (req, res) => {
+  res.type('text/plain').send('CodeStash API is running. Check /api/health or use the frontend app.');
+});
+
 // Error handler
 app.use(errorHandler);
 
