@@ -11,7 +11,28 @@ dotenv.config();
 const app = express();
 
 // Global middleware
-app.use(cors());
+// CORS configuration: allow specific origin(s) via env `CORS_ORIGIN`, defaults to permissive
+const allowedOrigins = (process.env.CORS_ORIGIN || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow non-browser clients or same-origin
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.length === 0) return callback(null, true); // allow all if not configured
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+// Handle preflight across the board
+app.options('*', cors(corsOptions));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
