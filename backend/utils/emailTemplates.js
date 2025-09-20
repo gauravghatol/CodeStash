@@ -19,6 +19,8 @@ function baseEmailTemplate({ title = 'Notification', preheader = '', bodyHtml = 
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
       <title>${title}</title>
+      <meta name="color-scheme" content="dark light" />
+      <meta name="supported-color-schemes" content="dark light" />
       <style>
         /* Some clients honor these */
         @media (prefers-color-scheme: dark) {
@@ -28,25 +30,29 @@ function baseEmailTemplate({ title = 'Notification', preheader = '', bodyHtml = 
         a { color: ${accent}; text-decoration: none; }
       </style>
     </head>
-    <body style="margin:0;padding:0;background:${bg};">
+    <body style="margin:0;padding:0;background:${bg};" bgcolor="${bg}">
       ${hiddenPreheader}
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${bg};padding:24px 12px;">
+      <!--[if mso]>
+      <center>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600"><tr><td>
+      <![endif]-->
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${bg};padding:24px 12px;" bgcolor="${bg}">
         <tr>
-          <td align="center">
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:${card};border:1px solid ${border};border-radius:12px;overflow:hidden;">
+          <td align="center" bgcolor="${bg}" style="background:${bg};">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:${card};border:1px solid ${border};border-radius:12px;overflow:hidden;" bgcolor="${card}">
               <tr>
-                <td style="padding:20px 20px 12px 20px;">
+                <td style="padding:20px 20px 12px 20px;background:${card};" bgcolor="${card}">
                   <div class="text" style="font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:${text};font-size:20px;font-weight:700;">${title}</div>
                 </td>
               </tr>
               <tr>
-                <td class="card" style="padding:0 20px 20px 20px;color:${text};font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+                <td class="card" style="padding:0 20px 20px 20px;color:${text};font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:${card};" bgcolor="${card}">
                   ${bodyHtml}
                   <div style="height:8px"></div>
                 </td>
               </tr>
               <tr>
-                <td style="padding:14px 20px;border-top:1px solid ${border};color:#9ca3af;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:12px;">
+                <td style="padding:14px 20px;border-top:1px solid ${border};color:#9ca3af;font-family:Inter,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:12px;background:${card};" bgcolor="${card}">
                   <div>
                     © ${new Date().getFullYear()} CodeStash · This is an automated message.
                   </div>
@@ -56,6 +62,10 @@ function baseEmailTemplate({ title = 'Notification', preheader = '', bodyHtml = 
           </td>
         </tr>
       </table>
+      <!--[if mso]>
+      </td></tr></table>
+      </center>
+      <![endif]-->
     </body>
   </html>`;
 }
