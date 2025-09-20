@@ -46,12 +46,15 @@ a { color: inherit; text-decoration: none; }
 .btn.ghost { background: transparent; }
 .btn.danger { background: linear-gradient(180deg, #7a1a1a, #991b1b); border-color: #991b1b; }
 
-.input, .textarea, .select {
+.input, .form-input, .textarea, .select {
   width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border);
   background: var(--card); color: var(--text); outline: none;
 }
-.input:focus, .textarea:focus, .select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,58,237,.25); }
+.input:focus, .form-input:focus, .textarea:focus, .select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,58,237,.25); }
 .textarea { min-height: 140px; resize: vertical; }
+
+/* Alias utility classes used in some forms */
+.form-label { color: var(--muted); font-size: 14px; display: inline-block; }
 
 .card {
   background: linear-gradient(180deg, #0f172a, #0b1224);
