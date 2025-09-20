@@ -4,6 +4,8 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { deleteSnippet, fetchSnippetById, likeSnippet, updateSnippet } from '../services/apiService';
 import { useAuth } from '../context/AuthContext';
+import { LANGUAGES, DEFAULT_LANGUAGE } from '../constants/languages';
+import { languageToHLJS } from '../utils/syntax';
 
 export default function SnippetDetailPage() {
   const { id } = useParams();
@@ -26,7 +28,7 @@ export default function SnippetDetailPage() {
         title: data.title || '',
         description: data.description || '',
         code: data.code || '',
-        language: data.language || 'JavaScript',
+  language: data.language || DEFAULT_LANGUAGE,
         tags: (data.tags || []).join(', '),
       });
     } catch (e) {
@@ -69,7 +71,9 @@ export default function SnippetDetailPage() {
         ) : (
           <div style={{ display: 'grid', gap: 8 }}>
             <input className="input" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-            <input className="input" value={form.language} onChange={(e) => setForm({ ...form, language: e.target.value })} />
+            <select className="select" value={form.language} onChange={(e) => setForm({ ...form, language: e.target.value })}>
+              {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
+            </select>
           </div>
         )}
         <div style={{ display: 'flex', gap: 8 }}>
@@ -88,7 +92,7 @@ export default function SnippetDetailPage() {
           ) : null}
           {snippet.description && <p className="helper">{snippet.description}</p>}
           <div className="card" style={{ padding: 0 }}>
-            <SyntaxHighlighter language={(snippet.language || 'javascript').toLowerCase()} style={atomOneDark} customStyle={{ margin: 0, padding: 16, background: 'transparent' }}>
+            <SyntaxHighlighter language={languageToHLJS(snippet.language || DEFAULT_LANGUAGE)} style={atomOneDark} customStyle={{ margin: 0, padding: 16, background: 'transparent' }}>
               {snippet.code || ''}
             </SyntaxHighlighter>
           </div>

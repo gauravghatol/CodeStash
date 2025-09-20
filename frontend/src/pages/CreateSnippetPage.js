@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createSnippet } from '../services/apiService';
-
-const LANGS = ['JavaScript','TypeScript','Python','Go','CSS','HTML','JSX'];
+import { LANGUAGES, DEFAULT_LANGUAGE } from '../constants/languages';
 
 export default function CreateSnippetPage() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [language, setLanguage] = useState(LANGS[0]);
+  const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
   const [tags, setTags] = useState('');
   const [code, setCode] = useState('');
   const [error, setError] = useState(null);
@@ -55,7 +54,7 @@ export default function CreateSnippetPage() {
             <div className="form-row">
               <label>Language</label>
               <select className="select" value={language} onChange={(e) => setLanguage(e.target.value)}>
-                {LANGS.map(l => <option key={l} value={l}>{l}</option>)}
+                {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
               </select>
             </div>
             <div className="form-row">

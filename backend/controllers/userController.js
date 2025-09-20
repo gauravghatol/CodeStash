@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 const sendEmail = require('../utils/sendEmail');
+const { otpEmailTemplate } = require('../utils/emailTemplates');
 
 const signToken = (user) => jwt.sign({ id: user._id, email: user.email, username: user.username }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
@@ -38,14 +39,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // Send OTP via email
   try {
-    await sendEmail({
-      to: user.email,
-      subject: 'Your CodeStash verification code',
-      html: `<p>Hi ${user.username},</p>
-             <p>Your verification code is:</p>
-             <p style="font-size:24px;font-weight:700;letter-spacing:4px">${otp}</p>
-             <p>This code will expire in 10 minutes.</p>`,
-    });
+    const appUrl = process.env.CLIENT_URL || '';
+    const { subject, html, text } = otpEmailTemplate({ username: user.username, otp, purpose: 'signup', appUrl });
+    await sendEmail({ to: user.email, subject, html, text });
   } catch (err) {
     const fallback = String(process.env.DEV_EMAIL_FALLBACK || '').toLowerCase() === 'true';
     console.warn('Failed to send signup OTP:', err.message);
@@ -156,14 +152,9 @@ const resendOtp = asyncHandler(async (req, res) => {
   user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
   await user.save();
   try {
-    await sendEmail({
-      to: user.email,
-      subject: purpose === 'signup' ? 'Your CodeStash verification code' : 'Your CodeStash password reset code',
-      html: `<p>Hi ${user.username},</p>
-             <p>Your ${purpose === 'signup' ? 'verification' : 'password reset'} code is:</p>
-             <p style="font-size:24px;font-weight:700;letter-spacing:4px">${otp}</p>
-             <p>This code will expire in 10 minutes.</p>`,
-    });
+    const appUrl = process.env.CLIENT_URL || '';
+    const { subject, html, text } = otpEmailTemplate({ username: user.username, otp, purpose, appUrl });
+    await sendEmail({ to: user.email, subject, html, text });
   } catch (err) {
     const fallback = String(process.env.DEV_EMAIL_FALLBACK || '').toLowerCase() === 'true';
     console.warn('Failed to resend OTP:', err.message);
@@ -190,14 +181,9 @@ const forgotPassword = asyncHandler(async (req, res) => {
   user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
   await user.save();
   try {
-    await sendEmail({
-      to: user.email,
-      subject: 'Your CodeStash password reset code',
-      html: `<p>Hi ${user.username},</p>
-             <p>Your password reset code is:</p>
-             <p style=\"font-size:24px;font-weight:700;letter-spacing:4px\">${otp}</p>
-             <p>This code will expire in 10 minutes.</p>`,
-    });
+    const appUrl = process.env.CLIENT_URL || '';
+    const { subject, html, text } = otpEmailTemplate({ username: user.username, otp, purpose: 'password_reset', appUrl });
+    await sendEmail({ to: user.email, subject, html, text });
   } catch (err) {
     const fallback = String(process.env.DEV_EMAIL_FALLBACK || '').toLowerCase() === 'true';
     console.warn('Failed to send forgot-password OTP:', err.message);

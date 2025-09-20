@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LANGUAGES } from '../constants/languages';
 
 export default function SearchBar({ onSearch }) {
   const [text, setText] = useState('');
@@ -14,13 +15,7 @@ export default function SearchBar({ onSearch }) {
       <input className="input" placeholder="Search by title, tag, or language" value={text} onChange={(e) => setText(e.target.value)} />
       <select className="select" value={language} onChange={(e) => setLanguage(e.target.value)}>
         <option value="">All Languages</option>
-        <option>JavaScript</option>
-        <option>TypeScript</option>
-        <option>Python</option>
-        <option>Go</option>
-        <option>CSS</option>
-        <option>HTML</option>
-        <option>JSX</option>
+        {LANGUAGES.map(l => <option key={l} value={l}>{l}</option>)}
       </select>
       <button className="btn primary" type="submit">Search</button>
     </form>
