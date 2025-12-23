@@ -1,5 +1,5 @@
 {
-  "name": "codestash-frontend",
+  "name": "codestash",
   "compatibility_date": "2025-12-23",
   "assets": {
     "directory": "./frontend/build"
